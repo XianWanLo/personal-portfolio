@@ -16,43 +16,92 @@ sidebarBtn.addEventListener("click", function () { elementToggleFunc(sidebar); }
 
 
 
-// testimonials variables
-const testimonialsItem = document.querySelectorAll("[data-testimonials-item]");
-const modalContainer = document.querySelector("[data-modal-container]");
-const modalCloseBtn = document.querySelector("[data-modal-close-btn]");
-const overlay = document.querySelector("[data-overlay]");
+// // testimonials variables
+// const testimonialsItem = document.querySelectorAll("[data-testimonials-item]");
+// const modalContainer = document.querySelector("[data-modal-container]");
+// const modalCloseBtn = document.querySelector("[data-modal-close-btn]");
+// const overlay = document.querySelector("[data-overlay]");
 
-// modal variable
-const modalImg = document.querySelector("[data-modal-img]");
-const modalTitle = document.querySelector("[data-modal-title]");
-const modalText = document.querySelector("[data-modal-text]");
+// // modal variable
+// const modalImg = document.querySelector("[data-modal-img]");
+// const modalTitle = document.querySelector("[data-modal-title]");
+// const modalText = document.querySelector("[data-modal-text]");
 
-// modal toggle function
-const testimonialsModalFunc = function () {
-  modalContainer.classList.toggle("active");
-  overlay.classList.toggle("active");
-}
+// // modal toggle function
+// const testimonialsModalFunc = function () {
+//   modalContainer.classList.toggle("active");
+//   overlay.classList.toggle("active");
+// }
 
-// add click event to all modal items
-for (let i = 0; i < testimonialsItem.length; i++) {
+// // add click event to all modal items
+// for (let i = 0; i < testimonialsItem.length; i++) {
 
-  testimonialsItem[i].addEventListener("click", function () {
+//   testimonialsItem[i].addEventListener("click", function () {
 
-    modalImg.src = this.querySelector("[data-testimonials-avatar]").src;
-    modalImg.alt = this.querySelector("[data-testimonials-avatar]").alt;
-    modalTitle.innerHTML = this.querySelector("[data-testimonials-title]").innerHTML;
-    modalText.innerHTML = this.querySelector("[data-testimonials-text]").innerHTML;
+//     modalImg.src = this.querySelector("[data-testimonials-avatar]").src;
+//     modalImg.alt = this.querySelector("[data-testimonials-avatar]").alt;
+//     modalTitle.innerHTML = this.querySelector("[data-testimonials-title]").innerHTML;
+//     modalText.innerHTML = this.querySelector("[data-testimonials-text]").innerHTML;
 
-    testimonialsModalFunc();
+//     testimonialsModalFunc();
 
-  });
+//   });
 
-}
+// }
 
-// add click event to modal close button
-modalCloseBtn.addEventListener("click", testimonialsModalFunc);
-overlay.addEventListener("click", testimonialsModalFunc);
+// // add click event to modal close button
+// modalCloseBtn.addEventListener("click", testimonialsModalFunc);
+// overlay.addEventListener("click", testimonialsModalFunc);
 
+
+// new contact form using FormSpree
+const form = document.querySelector("#contact-form");
+const form_status = document.querySelector("#contact-form-status");
+const form_button = document.querySelector("#contact-form-button");
+
+const handleSubmit = async (event) => {
+    
+  event.preventDefault();  // Prevent default form submission
+  const data = new FormData(form);
+
+  form_button.disabled = true;
+  form_button.textContent = "Submitting...";
+  
+  try {
+      const response = await fetch(form.action, {
+          method: form.method,
+          body: data,
+          headers: {
+              'Accept': 'application/json'
+          }
+      });
+
+      if (response.ok) {
+          form_status.textContent = "Thanks for your submission! 🎉";
+          form_status.style.color = "green";
+          form.reset();  // Clear the form
+      } else {
+          const errorData = await response.json();
+          if (errorData.errors) {
+              form_status.textContent = errorData.errors.map(error => error.message).join(", ");
+          } else {
+              form_status.textContent = "Oops! There was a problem submitting your form.";
+          }
+            form_status.style.color = "red";
+      }
+  } catch (error) {
+      form_status.textContent = "Oops! There was a problem submitting your form.";
+      form_status.style.color = "red";
+  } finally {
+      // Re-enable button after submission
+      form_button.disabled = false;
+      form_button.textContent = "Send Message";
+  }
+
+  }
+
+
+form.addEventListener("submit", handleSubmit);
 
 
 // custom select variables
@@ -115,24 +164,26 @@ for (let i = 0; i < filterBtn.length; i++) {
 
 
 
-// contact form variables
-const form = document.querySelector("[data-form]");
-const formInputs = document.querySelectorAll("[data-form-input]");
-const formBtn = document.querySelector("[data-form-btn]");
+// // contact form variables
+// const form = document.querySelector("[data-form]");
+// const formInputs = document.querySelectorAll("[data-form-input]");
+// const formBtn = document.querySelector("[data-form-btn]");
 
-// add event to all form input field
-for (let i = 0; i < formInputs.length; i++) {
-  formInputs[i].addEventListener("input", function () {
+// // add event to all form input field
+// for (let i = 0; i < formInputs.length; i++) {
+//   formInputs[i].addEventListener("input", function () {
 
-    // check form validation
-    if (form.checkValidity()) {
-      formBtn.removeAttribute("disabled");
-    } else {
-      formBtn.setAttribute("disabled", "");
-    }
+//     // check form validation
+//     if (form.checkValidity()) {
+//       formBtn.removeAttribute("disabled");
+//     } else {
+//       formBtn.setAttribute("disabled", "");
+//     }
 
-  });
-}
+//   });
+// }
+
+
 
 
 
